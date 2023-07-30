@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "sparrow",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/home/mjd/gcc-cross-compiler/bin/bin/i686-elf-gcc", // 改为自己电脑上MinGW的编译器地址即可。
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/sparrow/include/lib/kernel"
+            ],
+            "defines": [],
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
