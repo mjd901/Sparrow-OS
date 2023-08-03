@@ -37,6 +37,16 @@ section loader vstart=LOADER_BASE_ADDR
     ards_nr dw 0             ;ards结构体的数量
 
     loader_start:
+        mov ax,0xb800
+        mov gs,ax
+        mov BYTE [gs:0X88],'l'
+        mov byte [gs:0x89],0xA4 
+        mov BYTE [gs:0X8A],'a'
+        mov byte [gs:0x8b],0xA4
+        mov BYTE [gs:0X8C],'d'
+        mov byte [gs:0x8d],0xA4
+        mov BYTE [gs:0X8E],'e'
+        mov byte [gs:0x8f],0xA4
 ;----------------------------------获取内存使用ep820---------------------------------------------------
         xor ebx,ebx              ;参数
         mov edx,0x534d4150       ;参数
