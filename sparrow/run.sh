@@ -5,7 +5,8 @@ nasm -f elf -o build/kernel.o  kernel/kernel.S
 i686-elf-gcc -I include/lib/kernel -I kernel/ -c -fno-builtin -o build/init.o kernel/init.c
 i686-elf-gcc -I include/lib/kernel -I kernel/ -c -fno-builtin -o build/interrupt.o kernel/interrupt.c
 i686-elf-gcc -I /home/mjd/os-dev/sparrow-os/sparrow/include/lib/kernel -c -o build/main.o kernel/main.c 
-i686-elf-ld -Ttext 0xc0001500 -e main -o build/kernel.bin  build/main.o build/init.o build/interrupt.o build/kernel.o build/print.o # 注意，调用在前，实现在后，否则会出错
+i686-elf-gcc -I include/lib/kernel -I kernel/ -c -fno-builtin -o build/debug.o kernel/debug.c
+i686-elf-ld -Ttext 0xc0001500 -e main -o build/kernel.bin  build/main.o build/init.o build/debug.o build/interrupt.o build/kernel.o build/print.o # 注意，调用在前，实现在后，否则会出错
 
 
 dd if=build/mbr.bin of=/home/mjd/gcc-cross-compiler/bin/hd60.img bs=512 count=1 conv=notrunc
