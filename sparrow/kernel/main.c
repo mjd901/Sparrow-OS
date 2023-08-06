@@ -8,8 +8,8 @@ int main(void)
     init_all();
     asm volatile("sti");
     //test put_int(strchrs("hello",'l'));
-    ASSERT((char*)0==(uint8_t*)1);
+    ASSERT(1==1);
    
-    while(1); 
+    while(1){asm("hlt");}; 
     return 0;
 }

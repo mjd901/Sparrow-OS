@@ -13,3 +13,5 @@ dd if=build/mbr.bin of=/home/mjd/gcc-cross-compiler/bin/hd60.img bs=512 count=1 
 dd if=build/loader.bin of=/home/mjd/gcc-cross-compiler/bin/hd60.img bs=512 count=4 seek=2 conv=notrunc
 dd if=build/kernel.bin of=/home/mjd/gcc-cross-compiler/bin/hd60.img bs=512 count=200 seek=9 conv=notrunc
 bochs -f /home/mjd/gcc-cross-compiler/bin/bochsrc.disk
+
+#dd if=vbe.bin of=/dev/sdc1 bs=512 count=1 conv=notrunc
