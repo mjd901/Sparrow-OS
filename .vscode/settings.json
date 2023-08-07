@@ -3,6 +3,7 @@
         "print.h": "c",
         "stdint.h": "c",
         "debug.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "memory.h": "c"
     }
 }
