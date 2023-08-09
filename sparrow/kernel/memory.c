@@ -81,7 +81,6 @@ uint32_t *pde_ptr(uint32_t vaddr)
 uint32_t *pte_ptr(uint32_t vaddr)
 {
     return (uint32_t *)(0xffc00000 + ((vaddr & 0xffc00000) >> 10) + PTE_IDX(vaddr) * 4);
-  
 }
 
 /*建立虚拟和物理映射*/
@@ -130,15 +129,17 @@ void *malloc_page(enum pool_flags pf, uint32_t pg_cnt)
         return NULL;
     }
     uint32_t vaddr = (uint32_t)vaddr_start, cnt = pg_cnt;
-    struct pool* mem_pool = pf&PF_KERNEL ?&kernel_pool:&user_pool;
+    struct pool *mem_pool = pf & PF_KERNEL ? &kernel_pool : &user_pool;
     /*因为虚拟地址是连续的，但物理地址可以是不连续的，所以逐个做映射*/
-    while(cnt-- >0){
-        void* page_phyaddr = palloc(mem_pool); //分配一页物理内存
-        if (page_phyaddr == NULL){
+    while (cnt-- > 0)
+    {
+        void *page_phyaddr = palloc(mem_pool); // 分配一页物理内存
+        if (page_phyaddr == NULL)
+        {
             return NULL;
         }
-        page_table_add((void*)vaddr,page_phyaddr);
-        vaddr+=PG_SIZE; //虚拟内存+一页偏移
+        page_table_add((void *)vaddr, page_phyaddr);
+        vaddr += PG_SIZE; // 虚拟内存+一页偏移
     }
     return vaddr_start;
 }
@@ -146,16 +147,17 @@ void *malloc_page(enum pool_flags pf, uint32_t pg_cnt)
 /*内核物理内存池中申请 1 页内存，
 成功则返回其虚拟地址，失败则返回 NULL*/
 
-void* get_kernel_pages(uint32_t pg_cnt){
-    void* vaddr = malloc_page(PF_KERNEL,pg_cnt);
-    if(vaddr!=NULL){
-        memset(vaddr,0,pg_cnt*PG_SIZE);
+void *get_kernel_pages(uint32_t pg_cnt)
+{
+    void *vaddr = malloc_page(PF_KERNEL, pg_cnt);
+    if (vaddr != NULL)
+    {
+        memset(vaddr, 0, pg_cnt * PG_SIZE);
     }
     return vaddr;
 }
 
 /*初始化内存池*/
-
 static void mem_pool_init(uint32_t all_mem)
 {
     put_str("mem_pool_init start\n");
@@ -209,7 +211,7 @@ static void mem_pool_init(uint32_t all_mem)
 
 /*内存管理初始化入口*/
 void mem_init(void)
-{   
+{
     put_str("mem_init start\n");
     uint32_t mem_bytes_total = (*(uint32_t *)(0xb00));
     mem_pool_init(mem_bytes_total);

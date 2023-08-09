@@ -154,7 +154,7 @@ enum intr_status intr_enable()
       return old_status;
    }
 }
-
+//关闭中断，返回原来中断的状态
 enum intr_status intr_disable()
 {
    enum intr_status old_status;

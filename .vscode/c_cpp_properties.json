@@ -3,16 +3,19 @@
         {
             "name": "sparrow",
             "intelliSenseMode": "linux-gcc-x64",
-            "compilerPath": "/home/mjd/gcc-cross-compiler/bin/bin/i686-elf-gcc", // 改为自己电脑上MinGW的编译器地址即可。
+            "compilerPath": "/home/mjd/gcc-cross-compiler/bin/bin/i686-elf-gcc",
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/sparrow/include/lib/kernel",
                 "${workspaceFolder}/sparrow/kernel",
-                "${workspaceFolder}/sparrow/include/lib"
+                "${workspaceFolder}/sparrow/include/lib",
+                "${workspaceFolder}/sparrow/thread",
+                "${workspaceFolder}/sparrow/device"
             ],
             "defines": [],
             "cStandard": "c11",
-            "cppStandard": "c++17"
+            "cppStandard": "c++17",
+            "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
     "version": 4
