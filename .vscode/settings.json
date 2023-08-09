@@ -5,6 +5,7 @@
         "debug.h": "c",
         "init.h": "c",
         "memory.h": "c",
-        "thread.h": "c"
+        "thread.h": "c",
+        "list.h": "c"
     }
 }

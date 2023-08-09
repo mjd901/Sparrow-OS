@@ -13,8 +13,8 @@ LDFLAGS = -Ttext $(ENTRY_POINT)  -e  main -Map $(BUILD_DIR)/kernel.map  -m elf_i
 # -Wall ：尽可能的产生警告 -fno-builtin:当函数同名的时候不要使用c语言内部的函数  -W:显示警告 -Wstrict-prototypes:要求函数声明必须要有参数类型，否则警告 -Wmissing-prototypes：\
 必需要有函数声明，否则警告
 CFLAGS = -Wall $(LIB) -m32 -c -fno-builtin -W -Wstrict-prototypes -Wmissing-prototypes 
-OBJS = $(BUILD_DIR)/main.o  $(BUILD_DIR)/init.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/thread.o  $(BUILD_DIR)/memory.o $(BUILD_DIR)/bitmap.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/print.o \
-$(BUILD_DIR)/string.o $(BUILD_DIR)/debug.o 
+OBJS = $(BUILD_DIR)/main.o  $(BUILD_DIR)/init.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/thread.o  $(BUILD_DIR)/memory.o $(BUILD_DIR)/bitmap.o  $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/print.o \
+$(BUILD_DIR)/string.o $(BUILD_DIR)/debug.o  $(BUILD_DIR)/list.o $(BUILD_DIR)/switch.o
 
 #编译开始
 $(BUILD_DIR)/main.o: kernel/main.c
@@ -24,6 +24,9 @@ $(BUILD_DIR)/timer.o: device/timer.c
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/init.o: kernel/init.c
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/list.o: include/lib/kernel/list.c
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/interrupt.o: kernel/interrupt.c
@@ -50,7 +53,8 @@ $(BUILD_DIR)/kernel.o: kernel/kernel.S
 $(BUILD_DIR)/print.o: kernel/print.S
 	$(AS) $(ASFLAGS)  $< -o $@
 
-
+$(BUILD_DIR)/switch.o: thread/switch.S
+	$(AS) $(ASFLAGS)  $< -o $@
 
 #链接所有的obj
 $(BUILD_DIR)/kernel.bin: $(OBJS)

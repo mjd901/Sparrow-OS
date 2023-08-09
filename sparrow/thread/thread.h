@@ -1,7 +1,7 @@
 #ifndef _THREAD_THREAD_H
 #define _THREAD_THREAD_H
 #include"stdint.h"
-
+#include"list.h"
 typedef void thread_func(void*);//参数是一个地址，指向自己的参数，返回为空
 
 enum task_status{ //进程状态
@@ -50,19 +50,28 @@ struct thread_stack{
     thread_func* function;
     void* func_arg;
 };
+//pcb
+struct task_struct {
+   uint32_t* self_kstack;	        // 用于存储线程的栈顶位置，栈顶放着线程要用到的运行信息
+   enum task_status status;
+   uint8_t priority;		        // 线程优先级
+   char name[16];                   //用于存储自己的线程的名字
 
-//PCB
-struct task_struct{
-    uint32_t* self_kstack; //每个内核线程所使用的内核栈
-    enum task_status status; //状态
-    uint8_t priority; // 优先级别
-    char name[16];
-    uint32_t stack_magic;//梭的边界标记，用于检测梭的溢出
-    
+   uint8_t ticks;	                 //线程允许上处理器运行还剩下的滴答值，因为priority不能改变，所以要在其之外另行定义一个值来倒计时
+   uint32_t elapsed_ticks;          //此任务自上cpu运行后至今占用了多少cpu嘀嗒数, 也就是此任务执行了多久*/
+   struct list_elem general_tag;		//general_tag的作用是用于线程在一般的队列(如就绪队列或者等待队列)中的结点
+   struct list_elem all_list_tag;   //all_list_tag的作用是用于线程队列thread_all_list（这个队列用于管理所有线程）中的结点
+   uint32_t* pgdir;              // 进程自己页表的虚拟地址
+
+   uint32_t stack_magic;	       //如果线程的栈无限生长，总会覆盖地pcb的信息，那么需要定义个边界数来检测是否栈已经到了PCB的边界
 };
 
-struct task_struct * thread_start(char* name,int prio,thread_func function,void* func_arg);
-void init_thread(struct task_struct* pthread,char *name,int prio);
-void thread_create(struct task_struct* pthread,thread_func function,void* func_arg);
-void kernel_thread(thread_func* function,void* func_arg);
+void thread_create(struct task_struct* pthread, thread_func function, void* func_arg);
+void init_thread(struct task_struct* pthread, char* name, int prio);
+struct task_struct* thread_start(char* name, int prio, thread_func function, void* func_arg);
+
+
+void thread_init(void);
+void schedule(void);
+struct task_struct* running_thread(void);
 #endif
