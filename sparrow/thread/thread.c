@@ -43,7 +43,6 @@ void thread_create(struct task_struct* pthread,thread_func function,void* func_a
     kthread_stack->function = function;
     kthread_stack->func_arg=func_arg;
     kthread_stack->ebp=kthread_stack->ebx=kthread_stack->edi=kthread_stack->esi=0;
-
 }
 
 /* 初始化线程基本信息 , pcb中存储的是线程的管理信息，此函数用于根据传入的pcb的地址，线程的名字等来初始化线程的管理信息*/
@@ -137,4 +136,37 @@ void thread_init(void){
     /*将main创建为主线程*/
     make_main_thread();
     put_str("thread init done!\n");
+}
+
+/*线程阻塞
+1.关闭中断
+2.设置状态：阻塞
+3.使用调度函数换下当前线程
+4.恢复中断
+*/
+
+void thread_block(enum task_status stat){
+   ASSERT((stat==TASK_BLOCKED)||(stat==TASK_HANGING)||(stat==TASK_WAITING));
+   enum intr_status old_status = intr_disable(); //保证切换线程的时候不被打扰
+   struct task_struct* cur_thread = running_thread();
+   cur_thread->status = stat;
+   schedule();
+   intr_set_status(old_status);
+}
+
+
+/*线程解除阻塞*/
+
+void thread_unblock(struct task_struct* pthread){
+   enum intr_status old_status = intr_disable();
+   ASSERT((pthread->status==TASK_BLOCKED)||(pthread->status==TASK_HANGING)||(pthread->status==TASK_WAITING));
+   if(pthread->status!=TASK_READY){
+      ASSERT(!elem_find(&thread_ready_list,&pthread->general_tag));//确保不在就绪队列中
+      if(elem_find(&thread_ready_list,&pthread->general_tag)){
+         PANIC("thread_unblock:blocked thread in ready_list");
+      }
+      list_push(&thread_ready_list,&pthread->general_tag);
+      pthread->status=TASK_READY;
+   }
+   intr_set_status(old_status);
 }

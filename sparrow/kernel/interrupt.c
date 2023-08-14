@@ -5,7 +5,7 @@
 #include "io.h" //里面封装了一系列与端口操作的函数
 
 /*--------------------------------------------------中断门描述符初始化开始------------------------------------------------------------------*/
-#define IDT_DESC_CNT 0x21 // 支持的中断描述符个数33
+#define IDT_DESC_CNT 0x30 // 支持的中断描述符个数
 
 // 1.创建一个中断门描述符结构体
 // 2.创建中断门描述符表
@@ -68,7 +68,7 @@ static void pic_init(void)
    outb(PIC_S_DATA, 0x01); // ICW4: 8086模式, 正常EOI
 
    /* 打开主片上IR0,也就是目前只接受时钟产生的中断 */
-   outb(PIC_M_DATA, 0xfe);
+   outb(PIC_M_DATA, 0xfd);
    outb(PIC_S_DATA, 0xff);
 
    put_str("pic_init done\n");

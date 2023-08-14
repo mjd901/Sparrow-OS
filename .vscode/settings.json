@@ -6,6 +6,7 @@
         "init.h": "c",
         "memory.h": "c",
         "thread.h": "c",
-        "list.h": "c"
+        "list.h": "c",
+        "console.h": "c"
     }
 }

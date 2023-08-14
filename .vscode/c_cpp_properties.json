@@ -13,9 +13,9 @@
                 "${workspaceFolder}/sparrow/device"
             ],
             "defines": [],
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "configurationProvider": "ms-vscode.makefile-tools"
+            "cStandard": "gnu99",
+            "cppStandard": "c++17"
+           
         }
     ],
     "version": 4
