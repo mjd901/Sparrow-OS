@@ -6,15 +6,17 @@
             "compilerPath": "/home/mjd/gcc-cross-compiler/bin/bin/i686-elf-gcc",
             "includePath": [
                 "${workspaceFolder}",
-                "${workspaceFolder}/sparrow/include/lib/kernel",
+                "${workspaceFolder}/sparrow/boot/include",
+                "${workspaceFolder}/sparrow/lib",
+                "${workspaceFolder}/sparrow/lib/kernel",
                 "${workspaceFolder}/sparrow/kernel",
-                "${workspaceFolder}/sparrow/include/lib",
                 "${workspaceFolder}/sparrow/thread",
-                "${workspaceFolder}/sparrow/device"
+                "${workspaceFolder}/sparrow/device",
+                "${workspaceFolder}/sparrow/userprog",
             ],
             "defines": [],
-            "cStandard": "gnu99",
-            "cppStandard": "c++17"
+            "cStandard": "gnu99"
+        
            
         }
     ],

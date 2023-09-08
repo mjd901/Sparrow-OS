@@ -37,4 +37,3 @@ static inline void insw(uint16_t port, void* addr, uint32_t word_cnt) {
 }                                   //D表示寄存器edi/di                       //通知编译器，内存已经被改变了
 
 #endif
-

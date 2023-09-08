@@ -1,27 +1,27 @@
-#include"sync.h"
-#include "stdint.h"
-#include"global.h"
-#include"debug.h"
-#include"interrupt.h"
-/*初始化信号量*/
+#include "sync.h"
+#include "list.h"
+#include "global.h"
+#include "debug.h"
+#include "interrupt.h"
 
-void sema_init(struct semaphore* psema,uint8_t value){
-    psema->value = value;
-    list_init(&psema->waiters);
+//用于初始化信号量，传入参数就是指向信号量的指针与初值
+void sema_init(struct semaphore* psema, uint8_t value) {
+   psema->value = value;       // 为信号量赋初值
+   list_init(&psema->waiters); //初始化信号量的等待队列
 }
 
-/*初始化锁*/
-void lock_init(struct lock* plock){
-    plock->holder = NULL;
-    plock->holder_repeat_nr=0;
-    sema_init(&plock->semaphore,1);
+//用于初始化锁，传入参数是指向该锁的指针
+void lock_init(struct lock* plock) {
+   plock->holder = NULL;
+   plock->holder_repeat_nr = 0;
+   sema_init(&plock->semaphore, 1); //将信号量初始化为1，因为此函数一般处理二元信号量
 }
 
 //信号量的down操作，也就是减1操作，传入参数是指向要操作的信号量指针。线程想要申请信号量的时候用此函数
 void sema_down(struct semaphore* psema) {
    enum intr_status old_status = intr_disable();         //对于信号量的操作是必须关中断的
 
-   //一个自旋锁，来不断判断是否信号量已经被分配出去了。为什么不用if，因为当线程被唤醒后不一定能枪得到，唤醒后一堆线程争抢
+   //一个自旋锁，来不断判断是否信号量已经被分配出去了。为什么不用if，见书p450。
     while(psema->value == 0) {	// 若value为0,表示已经被别人持有
         ASSERT(!elem_find(&psema->waiters, &running_thread()->general_tag));
         /* 当前线程不应该已在信号量的waiters队列中 */
@@ -46,7 +46,7 @@ void sema_up(struct semaphore* psema) {
    enum intr_status old_status = intr_disable();
    ASSERT(psema->value == 0);	    
    if (!list_empty(&psema->waiters)) {   //判断信号量阻塞队列应为非空，这样才能执行唤醒操作
-      struct task_struct* thread_blocked = elem_to_entry(struct task_struct, general_tag, list_pop(&psema->waiters));
+      struct task_struct* thread_blocked = elem2entry(struct task_struct, general_tag, list_pop(&psema->waiters));
       thread_unblock(thread_blocked);
    }
    psema->value++;

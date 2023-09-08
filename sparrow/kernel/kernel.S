@@ -1,7 +1,8 @@
 [bits 32]
 %define ERROR_CODE nop		                ; 有些中断进入前CPU会自动压入错误码（32位）,为保持栈中格式统一,这里不做操作.
 %define ZERO push 0		                    ; 有些中断进入前CPU不会压入错误码，对于这类中断，我们为了与前一类中断统一管理，就自己压入32位的0
-extern idt_table		 					;idt_table是C中注册的中断处理程序数组
+
+extern idt_table		                    ;idt_table是C中注册的中断处理程序数组
 
 section .data
 global intr_entry_table
@@ -18,6 +19,7 @@ intr%1entry:		                        ; 每个中断处理程序都要压入中�
     push gs
     pushad
 
+                                            ; 如果是从片上进入的中断,除了往从片上发送EOI外,还要往主片上发送EOI 
     mov al,0x20                             ; 中断结束命令EOI
     out 0xa0,al                             ;向主片发送OCW2,其中EOI位为1，告知结束中断，详见书p317
     out 0x20,al                             ;向从片发送OCW2,其中EOI位为1，告知结束中断
@@ -40,11 +42,8 @@ intr_exit:
     pop fs
     pop es
     pop ds
-    add esp, 4			                    ;对于会压入错误码的中断会抛弃错误码（这个错误码是执行中断处理函数之前CPU自动压入的），对于不会压入错误码的中断，就会抛弃上面push的0 
-                                                ; 如果是从片上进入的中断,除了往从片上发送EOI外,还要往主片上发送EOI 
-   
+    add esp, 4			                    ;对于会压入错误码的中断会抛弃错误码（这个错误码是执行中断处理函数之前CPU自动压入的），对于不会压入错误码的中断，就会抛弃上面push的0                    
     iretd				                    ; 从中断返回,32位下iret等同指令iretd
-            			                    ; 从中断返回,32位下等同指令iretd
 
 
 VECTOR 0x00,ZERO                            ;调用之前写好的宏来批量生成中断处理函数，传入参数是中断号码与上面中断宏的%2步骤，这个步骤是什么都不做，还是压入0看p303
@@ -79,10 +78,6 @@ VECTOR 0x1c,ZERO
 VECTOR 0x1d,ERROR_CODE
 VECTOR 0x1e,ERROR_CODE
 VECTOR 0x1f,ZERO 
-
-; 上面的对应cpu自己会处理的中断
-;下面的对应可以选的中断
-
 VECTOR 0x20,ZERO	;时钟中断对应的入口
 VECTOR 0x21,ZERO	;键盘中断对应的入口
 VECTOR 0x22,ZERO	;级联用的
@@ -99,5 +94,3 @@ VECTOR 0x2c,ZERO	;ps/2鼠标
 VECTOR 0x2d,ZERO	;fpu浮点单元异常
 VECTOR 0x2e,ZERO	;硬盘
 VECTOR 0x2f,ZERO	;保留
-
-

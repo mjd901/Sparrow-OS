@@ -6,8 +6,8 @@
 
 /* 信号量结构 */
 struct semaphore {
-   uint8_t  value;              //一个信号量肯定有值来表示这个量
-   struct   list waiters;       //用一个双链表结点来管理所有阻塞在该信号量上的线程
+   uint8_t value;              //一个信号量肯定有值来表示这个量
+   struct list waiters;       //用一个双链表结点来管理所有阻塞在该信号量上的线程
 };
 
 /* 锁结构 */
@@ -24,5 +24,4 @@ void sema_up(struct semaphore* psema);
 void lock_init(struct lock* plock);
 void lock_acquire(struct lock* plock);
 void lock_release(struct lock* plock);
-
 #endif

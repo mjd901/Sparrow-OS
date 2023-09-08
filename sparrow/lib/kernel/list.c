@@ -1,5 +1,5 @@
-#include"list.h"
-#include"interrupt.h"
+#include "list.h"
+#include "interrupt.h"
 
 /* 初始化双向链表list */
 void list_init (struct list* list) {
@@ -101,4 +101,3 @@ uint32_t list_len(struct list* plist) {
 bool list_empty(struct list* plist) {		// 判断队列是否为空
    return (plist->head.next == &plist->tail ? true : false);
 }
-
