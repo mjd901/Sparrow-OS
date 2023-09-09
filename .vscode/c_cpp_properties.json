@@ -12,7 +12,7 @@
                 "${workspaceFolder}/sparrow/kernel",
                 "${workspaceFolder}/sparrow/thread",
                 "${workspaceFolder}/sparrow/device",
-                "${workspaceFolder}/sparrow/userprog",
+                "${workspaceFolder}/sparrow/userprog"
             ],
             "defines": [],
             "cStandard": "gnu99"
