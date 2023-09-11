@@ -7,6 +7,25 @@
 -------image   文档图像
 -------sparrow 项目源码
 
+├─ doc
+│   ├─ main
+│   │   ├─ java
+│   │   │   └─ com
+│   │   │       └─ example
+│   │   │           └─ YourClass.java
+│   │   └─ resources
+│   │       └─ config.properties
+│   └─ test
+│       └─ java
+│           └─ com
+│               └─ example
+│                   └─ YourClassTest.java
+├─ sparrow
+│   ├─ README.md
+│   └─ docs1.md
+├─ build.gradle
+└─ .gitignore
+
 ## 交叉编译
 目标平台暂时为x86，gcc源码编译为i386版本
 

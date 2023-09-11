@@ -94,3 +94,32 @@ VECTOR 0x2c,ZERO	;ps/2鼠标
 VECTOR 0x2d,ZERO	;fpu浮点单元异常
 VECTOR 0x2e,ZERO	;硬盘
 VECTOR 0x2f,ZERO	;保留
+
+;;;;;;;;;;;;;;;;   0x80号中断   ;;;;;;;;;;;;;;;;
+[bits 32]
+extern syscall_table            ;如同之前我们中断处理机制中引入了C中定义的中断处理程序入口地址表一样，这里引入了C中定义的系统调用函数入口地址表
+section .text
+global syscall_handler
+syscall_handler:
+                                ;1 保存上下文环境，为了复用之前写好的intr_exit:，所以我们仿照中断处理机制压入的东西，构建系统调用压入的东西
+   push 0			            ; 压入0, 使栈中格式统一
+   push ds
+   push es
+   push fs
+   push gs
+   pushad			            ; PUSHAD指令压入32位寄存器，其入栈顺序是:EAX,ECX,EDX,EBX,ESP,EBP,ESI,EDI  
+   push 0x80			        ; 此位置压入0x80也是为了保持统一的栈格式
+
+                                ;2 为系统调用子功能传入参数，由于这个函数是3个参数的用户程序系统调用入口都会使用
+                                ; 所以我们为了格式统一，直接按照最高参数数量压入3个参数
+   push edx			            ; 系统调用中第3个参数
+   push ecx			            ; 系统调用中第2个参数
+   push ebx			            ; 系统调用中第1个参数
+
+                                ;3 调用c中定义的功能处理函数
+   call [syscall_table + eax*4]	    ; 编译器会在栈中根据C函数声明匹配正确数量的参数
+   add esp, 12			        ; 跨过上面的三个参数
+
+                                ;4 将call调用后的返回值存入待当前内核栈中eax的位置，c语言会自动把返回值放入eax中（c语言的ABI规定）
+   mov [esp + 8*4], eax	
+   jmp intr_exit		        ; intr_exit返回,恢复上下文

@@ -3,7 +3,7 @@ ENTRY_POINT = 0XC0001500
 AS = nasm
 CC = i686-elf-gcc
 LD = i686-elf-ld 
-LIB= -I lib/ -I lib/kernel/ -I lib/user/ -I kernel/ -I device/ -I thread/ -I userprog/
+LIB= -I lib/ -I lib/kernel/ -I lib/user/ -I kernel/ -I device/ -I thread/ -I userprog/ 
 ASFLAGS = -f elf 
 BOOTASFLAGS =  -I boot/include/
 HD_PATH = /home/mjd/gcc-cross-compiler/bin/hd60.img
@@ -21,7 +21,7 @@ OBJS=$(BUILD_DIR)/main.o $(BUILD_DIR)/init.o \
 	$(BUILD_DIR)/print.o $(BUILD_DIR)/debug.o $(BUILD_DIR)/string.o $(BUILD_DIR)/bitmap.o \
 	$(BUILD_DIR)/memory.o $(BUILD_DIR)/thread.o	$(BUILD_DIR)/list.o	$(BUILD_DIR)/switch.o \
 	$(BUILD_DIR)/sync.o	$(BUILD_DIR)/console.o $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o \
-	$(BUILD_DIR)/tss.o	$(BUILD_DIR)/process.o
+	$(BUILD_DIR)/tss.o	$(BUILD_DIR)/process.o $(BUILD_DIR)/syscall.o $(BUILD_DIR)/syscall-init.o
 #顺序最好是调用在前，实现在后
 
 ######################编译两个启动文件的代码#####################################
@@ -82,6 +82,12 @@ $(BUILD_DIR)/tss.o:userprog/tss.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 $(BUILD_DIR)/process.o:userprog/process.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(BUILD_DIR)/syscall.o:lib/user/syscall.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(BUILD_DIR)/syscall-init.o:userprog/syscall-init.c
 	$(CC) $(CFLAGS) -o $@ $<
 ###################编译汇编内核代码#####################################################
 $(BUILD_DIR)/kernel.o:kernel/kernel.S 

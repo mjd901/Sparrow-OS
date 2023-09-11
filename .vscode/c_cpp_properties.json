@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "sparrow",
-            "intelliSenseMode": "linux-gcc-x64",
+            "intelliSenseMode": "linux-gcc-x86",
             "compilerPath": "/home/mjd/gcc-cross-compiler/bin/bin/i686-elf-gcc",
             "includePath": [
                 "${workspaceFolder}",
@@ -12,7 +12,8 @@
                 "${workspaceFolder}/sparrow/kernel",
                 "${workspaceFolder}/sparrow/thread",
                 "${workspaceFolder}/sparrow/device",
-                "${workspaceFolder}/sparrow/userprog"
+                "${workspaceFolder}/sparrow/userprog",
+                "${workspaceFolder}/sparrow/lib/user"
             ],
             "defines": [],
             "cStandard": "gnu99"
