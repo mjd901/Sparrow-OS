@@ -1,4 +1,4 @@
-{
+{   
     "files.associations": {
         "print.h": "c",
         "stdint.h": "c",
@@ -10,5 +10,11 @@
         "console.h": "c",
         "global.h": "c",
         "process.h": "c"
-    }
+    },
+  // 字体主题的设置1
+  "workbench.colorTheme": "Monokai Dimmed",
+  "editor.fontFamily": "Fira Code", //options: Fira Code / Yozai 
+  "editor.fontLigatures": true,
+  "editor.fontSize": 15,
+  "editor.fontWeight": "normal",
 }

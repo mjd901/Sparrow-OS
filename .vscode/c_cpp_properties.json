@@ -16,7 +16,7 @@
                 "${workspaceFolder}/sparrow/lib/user"
             ],
             "defines": [],
-            "cStandard": "gnu99"
+            "cStandard": "c99"
         
            
         }

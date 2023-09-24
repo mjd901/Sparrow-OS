@@ -2,29 +2,7 @@
 
 本项目是一个os项目，编程语言主要为c和nasm汇编。使用nasm编译，并且使用makefile进行编译。主要文档在doc目录下。
 项目组成
----sparrowos
--------doc     文档说明
--------image   文档图像
--------sparrow 项目源码
 
-├─ doc
-│   ├─ main
-│   │   ├─ java
-│   │   │   └─ com
-│   │   │       └─ example
-│   │   │           └─ YourClass.java
-│   │   └─ resources
-│   │       └─ config.properties
-│   └─ test
-│       └─ java
-│           └─ com
-│               └─ example
-│                   └─ YourClassTest.java
-├─ sparrow
-│   ├─ README.md
-│   └─ docs1.md
-├─ build.gradle
-└─ .gitignore
 
 ## 交叉编译
 目标平台暂时为x86，gcc源码编译为i386版本

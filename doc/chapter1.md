@@ -5,7 +5,7 @@ Intel为了系统的兼容，前两种工作模式也一直保留着，需要开
 ![Alt text](image/image.png)
 
 &ensp;&ensp;执行第一条指令的地址：`0xFFFF0~0XFFFFF`,对应的指令如下：
-```asm
+```nasm
 jmp far f000:e50b
 ```
 f000*4+e50b也就是说才是bios程序的正式入口。好的，现在bios从该地址开始运行，在运行过程中对各种硬件进行检测，并且加载引导程序。
