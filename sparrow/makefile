@@ -22,7 +22,7 @@ OBJS=$(BUILD_DIR)/main.o $(BUILD_DIR)/init.o \
 	$(BUILD_DIR)/memory.o $(BUILD_DIR)/thread.o	$(BUILD_DIR)/list.o	$(BUILD_DIR)/switch.o \
 	$(BUILD_DIR)/sync.o	$(BUILD_DIR)/console.o $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o \
 	$(BUILD_DIR)/tss.o	$(BUILD_DIR)/process.o $(BUILD_DIR)/syscall.o $(BUILD_DIR)/syscall-init.o\
-	$(BUILD_DIR)/stdio.o
+	$(BUILD_DIR)/ide.o $(BUILD_DIR)/stdio-kernel.o $(BUILD_DIR)/stdio.o 
 #顺序最好是调用在前，实现在后
 
 ######################编译两个启动文件的代码#####################################
@@ -91,6 +91,12 @@ $(BUILD_DIR)/syscall.o:lib/user/syscall.c
 $(BUILD_DIR)/syscall-init.o:userprog/syscall-init.c
 	$(CC) $(CFLAGS) -o $@ $<
 
+$(BUILD_DIR)/ide.o:device/ide.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(BUILD_DIR)/stdio-kernel.o:lib/kernel/stdio-kernel.c
+	$(CC) $(CFLAGS) -o $@ $<
+
 $(BUILD_DIR)/stdio.o:lib/stdio.c
 	$(CC) $(CFLAGS) -o $@ $<
 ###################编译汇编内核代码#####################################################
@@ -125,6 +131,6 @@ build:$(BUILD_DIR)/kernel.bin
 	
 #执行build需要依赖kernel.bin，但是一开始没有，就会递归执行之前写好的语句编译kernel.bin
 
-all:mk_dir boot build hd
+all: mk_dir  clean boot build hd
 	bochs -f /home/mjd/gcc-cross-compiler/bin/bochsrc.disk
 #make all 就是依次执行mk_dir build hd
