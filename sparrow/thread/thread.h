@@ -3,10 +3,12 @@
 #include "stdint.h"
 #include "list.h"
 #include "memory.h"
-   typedef uint16_t pid_t;
+typedef uint16_t pid_t;
                                 //定义一种叫thread_fun的函数类型，该类型返回值是空，参数是一个地址(这个地址用来指向自己的参数)。
                                 //这样定义，这个类型就能够具有很大的通用性，很多函数都是这个类型
 typedef void thread_func(void*);
+
+#define MAX_FILES_OPEN_PROC 8 //一个进程最多打开文件8次
 
                                 /* 进程或线程的状态 */
 enum task_status {
@@ -81,6 +83,7 @@ struct task_struct {
 
    uint8_t ticks;	                 //线程允许上处理器运行还剩下的滴答值，因为priority不能改变，所以要在其之外另行定义一个值来倒计时
    uint32_t elapsed_ticks;          //此任务自上cpu运行后至今占用了多少cpu嘀嗒数, 也就是此任务执行了多久*/
+   uint32_t fd_table[MAX_FILES_OPEN_PROC];//文件描述符数组
    struct list_elem general_tag;		//general_tag的作用是用于线程在一般的队列(如就绪队列或者等待队列)中的结点
    struct list_elem all_list_tag;   //all_list_tag的作用是用于线程队列thread_all_list（这个队列用于管理所有线程）中的结点
    uint32_t* pgdir;              // 进程自己页表的虚拟地址

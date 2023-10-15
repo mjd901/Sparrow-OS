@@ -13,7 +13,8 @@
                 "${workspaceFolder}/sparrow/thread",
                 "${workspaceFolder}/sparrow/device",
                 "${workspaceFolder}/sparrow/userprog",
-                "${workspaceFolder}/sparrow/lib/user"
+                "${workspaceFolder}/sparrow/lib/user",
+                "${workspaceFolder}/sparrow/fs",
             ],
             "defines": [],
             "cStandard": "c99"

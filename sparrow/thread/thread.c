@@ -94,6 +94,16 @@ void init_thread(struct task_struct* pthread, char* name, int prio) {
    pthread->pgdir = NULL;	//线程没有自己的地址空间，进程的pcb这一项才有用，指向自己的页表虚拟地址	
    pthread->self_kstack = (uint32_t*)((uint32_t)pthread + PG_SIZE);     //本操作系统比较简单，线程不会太大，就将线程栈顶定义为pcb地址
                                                                         //+4096的地方，这样就留了一页给线程的信息（包含管理信息与运行信息）空间
+
+   /*预留标准输入输出*/
+   pthread->fd_table[0]=0;
+   pthread->fd_table[1]=1;
+   pthread->fd_table[2]=2;
+   uint8_t fd_idx=3;
+   while(fd_idx<8){
+      pthread->fd_table[fd_idx]=-1;
+      fd_idx++;
+   }                                                                     
    pthread->stack_magic = 0x19870916;	                                // /定义的边界数字，随便选的数字来判断线程的栈是否已经生长到覆盖pcb信息了              
 }
 

@@ -43,4 +43,5 @@ extern struct ide_channel channels[];
 void ide_read(struct disk* hd, uint32_t lba, void* buf, uint32_t sec_cnt);
 void ide_write(struct disk* hd, uint32_t lba, void* buf, uint32_t sec_cnt);
 void intr_hd_handler(uint8_t irq_no);
+extern struct list partition_list;
 #endif
