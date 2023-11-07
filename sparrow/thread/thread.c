@@ -103,7 +103,8 @@ void init_thread(struct task_struct* pthread, char* name, int prio) {
    while(fd_idx<8){
       pthread->fd_table[fd_idx]=-1;
       fd_idx++;
-   }                                                                     
+   }
+   pthread->cwd_inode_nr=0;                                                                     
    pthread->stack_magic = 0x19870916;	                                // /定义的边界数字，随便选的数字来判断线程的栈是否已经生长到覆盖pcb信息了              
 }
 

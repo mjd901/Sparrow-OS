@@ -31,7 +31,7 @@
 00000000000i[      ]   SB16 support: no
 00000000000i[      ]   USB support: no
 00000000000i[      ]   VGA extension support: vbe
-00000000000i[MEM0  ] allocated memory at 0x7f71cb1dd010. after alignment, vector=0x7f71cb1de000
+00000000000i[MEM0  ] allocated memory at 0x7fd8269dd010. after alignment, vector=0x7fd8269de000
 00000000000i[MEM0  ] 32.00MB
 00000000000i[MEM0  ] mem block size = 0x00100000, blocks=32
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/home/mjd/gcc-cross-compiler/bin/share/bochs/BIOS-bochs-latest')
@@ -41,7 +41,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Sun Oct 15 21:48:03 2023 (time0=1697377683)
+00000000000i[CMOS  ] Setting initial clock to: Tue Nov  7 10:54:33 2023 (time0=1699325673)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -194,26 +194,26 @@
 00001876616i[BIOS  ] ata0-0: PCHS=121/16/63 translation=none LCHS=121/16/63
 00001930649i[BIOS  ] ata0-1: PCHS=162/16/63 translation=none LCHS=162/16/63
 00014109268i[BIOS  ] Booting from 0000:7c00
-00099200003i[      ] Ctrl-C detected in signal handler.
-00099200003i[XGUI  ] Mouse capture off
-00099200003i[      ] dbg: Quit
-00099200003i[CPU0  ] CPU is in protected mode (active)
-00099200003i[CPU0  ] CS.mode = 32 bit
-00099200003i[CPU0  ] SS.mode = 32 bit
-00099200003i[CPU0  ] EFER   = 0x00000000
-00099200003i[CPU0  ] | EAX=c000a18c  EBX=00070074  ECX=c009eb37  EDX=00000001
-00099200003i[CPU0  ] | ESP=c009eff0  EBP=c009eff8  ESI=00077236  EDI=c0009236
-00099200003i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf SF zf af pf cf
-00099200003i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-00099200003i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
-00099200003i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-00099200003i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-00099200003i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-00099200003i[CPU0  ] |  FS:0000( 0000| 0|  0) 00000000 00000000 0 0
-00099200003i[CPU0  ] |  GS:0018( 0003| 0|  0) c00b8000 00007fff 1 1
-00099200003i[CPU0  ] | EIP=c0001526 (c0001526)
-00099200003i[CPU0  ] | CR0=0xe0000011 CR2=0x00000000
-00099200003i[CPU0  ] | CR3=0x00100000 CR4=0x00000000
-00099200003i[CMOS  ] Last time is 1697377707 (Sun Oct 15 21:48:27 2023)
-00099200003i[XGUI  ] Exit
-00099200003i[SIM   ] quit_sim called with exit code 0
+00159200002i[      ] Ctrl-C detected in signal handler.
+00159200002i[XGUI  ] Mouse capture off
+00159200002i[      ] dbg: Quit
+00159200002i[CPU0  ] CPU is in protected mode (active)
+00159200002i[CPU0  ] CS.mode = 32 bit
+00159200002i[CPU0  ] SS.mode = 32 bit
+00159200002i[CPU0  ] EFER   = 0x00000000
+00159200002i[CPU0  ] | EAX=00000038  EBX=00070074  ECX=c009ebbc  EDX=00000038
+00159200002i[CPU0  ] | ESP=c009efe0  EBP=c009eff8  ESI=0007bd76  EDI=c000dd76
+00159200002i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf SF zf af pf cf
+00159200002i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00159200002i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
+00159200002i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+00159200002i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+00159200002i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+00159200002i[CPU0  ] |  FS:0000( 0000| 0|  0) 00000000 00000000 0 0
+00159200002i[CPU0  ] |  GS:0018( 0003| 0|  0) c00b8000 00007fff 1 1
+00159200002i[CPU0  ] | EIP=c00015a2 (c00015a2)
+00159200002i[CPU0  ] | CR0=0xe0000011 CR2=0x00000000
+00159200002i[CPU0  ] | CR3=0x00100000 CR4=0x00000000
+00159200002i[CMOS  ] Last time is 1699325712 (Tue Nov  7 10:55:12 2023)
+00159200002i[XGUI  ] Exit
+00159200002i[SIM   ] quit_sim called with exit code 0

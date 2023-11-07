@@ -68,14 +68,16 @@ uint32_t vsprintf(char* str, const char* format, va_list ap) {
 }
 
 /* 格式化输出字符串format */
-uint32_t printf(const char* format, ...) {
-   va_list args;
-   va_start(args, format);	       					// 使args指向format
-   char buf[1024] = {0};	       					// 用于存储拼接后的字符串
-   vsprintf(buf, format, args);
-   va_end(args);
-   return write(buf); 
+uint32_t printf(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format); // 使args指向format
+    char buf[1024] = {0};   // 用于存储拼接后的字符串
+    vsprintf(buf, format, args);
+    va_end(args);
+    return write(1, buf, strlen(buf));
 }
+
 
 
 /* 同printf不同的地方就是字符串不是写到终端,而是写到buf中 */
