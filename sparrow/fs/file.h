@@ -21,14 +21,14 @@ enum bitmap_type
     BLOCK_BITMAP  // 块位图
 };
 
+
 /* 标准输入输出描述符 */
 enum std_fd {
    stdin_no,   // 0 标准输入
    stdout_no,  // 1 标准输出
    stderr_no   // 2 标准错误
 };
-int32_t file_write(struct file *file, const void *buf, uint32_t count);
-int32_t file_read(struct file *file, void *buf, uint32_t count);
+
 
 int32_t get_free_slot_in_global(void);
 int32_t pcb_fd_install(int32_t globa_fd_idx);
@@ -39,4 +39,6 @@ int32_t file_create(struct dir *parent_dir, char *filename, uint8_t flag);
 extern struct file file_table[MAX_FILE_OPEN];
 int32_t file_open(uint32_t inode_no, uint8_t flag);
 int32_t file_close(struct file *file);
+int32_t file_write(struct file *file, const void *buf, uint32_t count);
+int32_t file_read(struct file *file, void *buf, uint32_t count);
 #endif

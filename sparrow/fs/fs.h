@@ -41,6 +41,7 @@ enum whence
     SEEK_CUR,
     SEEK_END
 };
+
 /* 文件属性结构体 */
 struct stat
 {
@@ -67,4 +68,5 @@ int32_t sys_rmdir(const char *pathname);
 char *sys_getcwd(char *buf, uint32_t size);
 int32_t sys_chdir(const char *path);
 int32_t sys_stat(const char *path, struct stat *buf);
+void sys_putchar(char char_asci);
 #endif

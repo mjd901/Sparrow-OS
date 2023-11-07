@@ -8,10 +8,11 @@
 #include "file.h"
 
 /* 用来存储inode位置 */
-struct inode_position {
-   bool	 two_sec;	// inode是否跨扇区
-   uint32_t sec_lba;	// inode所在的扇区号
-   uint32_t off_size;	// inode在扇区内的字节偏移量
+struct inode_position
+{
+    bool two_sec;      // inode是否跨扇区
+    uint32_t sec_lba;  // inode所在的扇区号
+    uint32_t off_size; // inode在扇区内的字节偏移量
 };
 
 /* 获取inode所在的扇区和扇区内的偏移量 */
@@ -40,7 +41,6 @@ static void inode_locate(struct partition *part, uint32_t inode_no, struct inode
     inode_pos->off_size = off_size_in_sec;
 }
 
-
 /* 将inode写入到分区part */
 void inode_sync(struct partition *part, struct inode *inode, void *io_buf)
 { // io_buf是用于硬盘io的缓冲区
@@ -49,7 +49,7 @@ void inode_sync(struct partition *part, struct inode *inode, void *io_buf)
     inode_locate(part, inode_no, &inode_pos); // inode位置信息会存入inode_pos
     ASSERT(inode_pos.sec_lba <= (part->start_lba + part->sec_cnt));
 
-    /* 硬盘中的inode中的成员inode_tag和i_open_cnts是不需要的,
+    /* 硬盘中的inode中的成员inode_tag和i_open_cnts是不需要的,
      * 它们只在内存中记录链表位置和被多少进程共享 */
     struct inode pure_inode;
     memcpy(&pure_inode, inode, sizeof(struct inode));

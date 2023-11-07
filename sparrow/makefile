@@ -3,7 +3,7 @@ ENTRY_POINT = 0XC0001500
 AS = nasm
 CC = i686-elf-gcc
 LD = i686-elf-ld 
-LIB= -I lib/ -I lib/kernel/ -I lib/user/ -I kernel/ -I device/ -I thread/ -I userprog/ -I fs/
+LIB= -I lib/ -I lib/kernel/ -I lib/user/ -I kernel/ -I device/ -I thread/ -I userprog/ -I fs/ -I shell/
 ASFLAGS = -f elf 
 BOOTASFLAGS =  -I boot/include/
 HD_PATH = /home/mjd/gcc-cross-compiler/bin/hd60.img
@@ -22,8 +22,8 @@ OBJS=$(BUILD_DIR)/main.o $(BUILD_DIR)/init.o \
 	$(BUILD_DIR)/memory.o $(BUILD_DIR)/thread.o	$(BUILD_DIR)/list.o	$(BUILD_DIR)/switch.o \
 	$(BUILD_DIR)/sync.o	$(BUILD_DIR)/console.o $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o \
 	$(BUILD_DIR)/tss.o	$(BUILD_DIR)/process.o $(BUILD_DIR)/syscall.o $(BUILD_DIR)/syscall-init.o\
-	$(BUILD_DIR)/stdio-kernel.o $(BUILD_DIR)/stdio.o \
-	$(BUILD_DIR)/file.o $(BUILD_DIR)/fs.o $(BUILD_DIR)/ide.o $(BUILD_DIR)/dir.o  $(BUILD_DIR)/inode.o  \
+	$(BUILD_DIR)/stdio-kernel.o $(BUILD_DIR)/stdio.o $(BUILD_DIR)/file.o $(BUILD_DIR)/fs.o \
+	$(BUILD_DIR)/ide.o $(BUILD_DIR)/dir.o  $(BUILD_DIR)/inode.o  $(BUILD_DIR)/fork.o $(BUILD_DIR)/shell.o\
 	
 #顺序最好是调用在前，实现在后
 
@@ -107,6 +107,12 @@ $(BUILD_DIR)/file.o:fs/file.c
 
 $(BUILD_DIR)/inode.o:fs/inode.c
 	$(CC) $(CFLAGS) -o $@ $<	
+
+$(BUILD_DIR)/fork.o:userprog/fork.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(BUILD_DIR)/shell.o:shell/shell.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 $(BUILD_DIR)/stdio-kernel.o:lib/kernel/stdio-kernel.c
 	$(CC) $(CFLAGS) -o $@ $<

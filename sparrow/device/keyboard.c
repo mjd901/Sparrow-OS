@@ -192,7 +192,6 @@ static void intr_keyboard_handler(void)
 	            cur_char -= 'a';
 	        }
             if (!ioq_full(&kbd_buf)) {
-                put_char(cur_char);	    // 临时的
                 ioq_putchar(&kbd_buf, cur_char);
             }
 	        return;

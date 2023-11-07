@@ -1,12 +1,9 @@
-#include "stdint.h"
-#include "ide.h"
-#include "inode.h"
-#include "debug.h"
+#include "file.h"
+#include "stdio-kernel.h"
 #include "super_block.h"
+#include "fs.h"
 #include "string.h"
 #include "interrupt.h"
-#include "file.h" 
-#include "stdio-kernel.h"
 
 /* 文件表 */
 struct file file_table[MAX_FILE_OPEN];
@@ -54,9 +51,8 @@ int32_t pcb_fd_install(int32_t globa_fd_idx)
     return local_fd_idx;
 }
 
-
 /* 分配一个i结点,返回i结点号 */
-int32_t inode_bitmap_alloc(struct partition* part)
+int32_t inode_bitmap_alloc(struct partition *part)
 {
     int32_t bit_idx = bitmap_scan(&part->inode_bitmap, 1);
     if (bit_idx == -1)
@@ -472,7 +468,6 @@ int32_t file_write(struct file *file, const void *buf, uint32_t count)
     return bytes_written;
 }
 
-
 /* 从文件file中读取count个字节写入buf, 返回读出的字节数,若到文件尾则返回-1 */
 int32_t file_read(struct file *file, void *buf, uint32_t count)
 {
@@ -505,7 +500,7 @@ int32_t file_read(struct file *file, void *buf, uint32_t count)
     uint32_t block_read_start_idx = file->fd_pos / BLOCK_SIZE;        // 数据所在块的起始地址
     uint32_t block_read_end_idx = (file->fd_pos + size) / BLOCK_SIZE; // 数据所在块的终止地址
     uint32_t read_blocks = block_read_start_idx - block_read_end_idx; // 如增量为0,表示数据在同一扇区
-    ASSERT(block_read_start_idx < 139 && block_read_end_idx < 139);
+    ASSERT(block_read_start_idx < 139 && block_read_end_idx < 139);   // 应该改为140
 
     int32_t indirect_block_table; // 用来获取一级间接表地址
     uint32_t block_idx;           // 获取待读的块地址
@@ -526,7 +521,7 @@ int32_t file_read(struct file *file, void *buf, uint32_t count)
         }
     }
     else
-    {   // 若要读多个块
+    { // 若要读多个块
         /* 第一种情况: 起始块和终止块属于直接块*/
         if (block_read_end_idx < 12)
         { // 数据结束所在的块属于直接块
