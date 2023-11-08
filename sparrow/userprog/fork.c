@@ -7,8 +7,7 @@
 #include "process.h"
 #include "file.h"
 #include "interrupt.h"
-
-
+#include "pipe.h"
 
 /* 将父进程的pcb、虚拟地址位图拷贝给子进程 */
 static int32_t copy_pcb_vaddrbitmap_stack0(struct task_struct *child_thread, struct task_struct *parent_thread)
@@ -33,8 +32,6 @@ static int32_t copy_pcb_vaddrbitmap_stack0(struct task_struct *child_thread, str
     memcpy(vaddr_btmp, child_thread->userprog_vaddr.vaddr_bitmap.bits, bitmap_pg_cnt * PG_SIZE);
     child_thread->userprog_vaddr.vaddr_bitmap.bits = vaddr_btmp;
     /* 调试用 */
-    ASSERT(strlen(child_thread->name) < 11); // pcb.name的长度是16,为避免下面strcat越界
-    strcat(child_thread->name, "_fork");
     return 0;
 }
 
@@ -131,7 +128,14 @@ static void update_inode_open_cnts(struct task_struct *thread)
         ASSERT(global_fd < MAX_FILE_OPEN);
         if (global_fd != -1)
         {
-            file_table[global_fd].fd_inode->i_open_cnts++;
+            if (is_pipe(local_fd))
+            {
+                file_table[global_fd].fd_pos++;
+            }
+            else
+            {
+                file_table[global_fd].fd_inode->i_open_cnts++;
+            }
         }
         local_fd++;
     }

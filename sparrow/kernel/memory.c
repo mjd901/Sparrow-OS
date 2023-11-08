@@ -37,7 +37,7 @@ struct pool
 
 struct pool kernel_pool, user_pool; // 为kernel与user分别建立物理内存池，让用户进程只能从user内存池获得新的内存空间，
                                     // 以免申请完所有可用空间,内核就不能申请空间了
-struct virtual_addr kernel_vaddr; // 用于管理内核虚拟地址空间
+struct virtual_addr kernel_vaddr;   // 用于管理内核虚拟地址空间
 
 // 初始化内核物理内存池与用户物理内存池
 static void mem_pool_init(uint32_t all_mem)
@@ -212,7 +212,7 @@ static void page_table_add(void *_vaddr, void *_page_phyaddr)
         }
     }
     else
-    {   // 页目录项不存在,所以要先创建页目录再创建页表项.
+    { // 页目录项不存在,所以要先创建页目录再创建页表项.
         /* 页表中用到的页框一律从内核空间分配 */
         uint32_t pde_phyaddr = (uint32_t)palloc(&kernel_pool);
 
@@ -285,18 +285,21 @@ void *get_user_pages(uint32_t pg_cnt)
     return vaddr;
 }
 
-// 用于为指定的虚拟地址申请一个物理页，传入参数是这个虚拟地址，要申请的物理页所在的地址池的标志。申请失败，返回null
+/* 将地址vaddr与pf池中的物理地址关联,仅支持一页空间分配 */
 void *get_a_page(enum pool_flags pf, uint32_t vaddr)
 {
     struct pool *mem_pool = pf & PF_KERNEL ? &kernel_pool : &user_pool;
     lock_acquire(&mem_pool->lock);
+
+    /* 先将虚拟地址对应的位图置1 */
     struct task_struct *cur = running_thread();
     int32_t bit_idx = -1;
+
     /* 若当前是用户进程申请用户内存,就修改用户进程自己的虚拟地址位图 */
     if (cur->pgdir != NULL && pf == PF_USER)
     {
         bit_idx = (vaddr - cur->userprog_vaddr.vaddr_start) / PG_SIZE;
-        ASSERT(bit_idx > 0);
+        ASSERT(bit_idx >= 0);
         bitmap_set(&cur->userprog_vaddr.vaddr_bitmap, bit_idx, 1);
     }
     else if (cur->pgdir == NULL && pf == PF_KERNEL)
@@ -310,9 +313,13 @@ void *get_a_page(enum pool_flags pf, uint32_t vaddr)
     {
         PANIC("get_a_page:not allow kernel alloc userspace or user alloc kernelspace by get_a_page");
     }
+
     void *page_phyaddr = palloc(mem_pool);
     if (page_phyaddr == NULL)
+    {
+        lock_release(&mem_pool->lock);
         return NULL;
+    }
     page_table_add((void *)vaddr, page_phyaddr);
     lock_release(&mem_pool->lock);
     return (void *)vaddr;
@@ -644,4 +651,22 @@ void *get_a_page_without_opvaddrbitmap(enum pool_flags pf, uint32_t vaddr)
     page_table_add((void *)vaddr, page_phyaddr);
     lock_release(&mem_pool->lock);
     return (void *)vaddr;
+}
+
+/* 根据物理页框地址pg_phy_addr在相应的内存池的位图清0,不改动页表*/
+void free_a_phy_page(uint32_t pg_phy_addr)
+{
+    struct pool *mem_pool;
+    uint32_t bit_idx = 0;
+    if (pg_phy_addr >= user_pool.phy_addr_start)
+    {
+        mem_pool = &user_pool;
+        bit_idx = (pg_phy_addr - user_pool.phy_addr_start) / PG_SIZE;
+    }
+    else
+    {
+        mem_pool = &kernel_pool;
+        bit_idx = (pg_phy_addr - kernel_pool.phy_addr_start) / PG_SIZE;
+    }
+    bitmap_set(&mem_pool->pool_bitmap, bit_idx, 0);
 }
